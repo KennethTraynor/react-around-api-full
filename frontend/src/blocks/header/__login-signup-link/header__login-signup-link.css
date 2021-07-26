@@ -1,0 +1,28 @@
+.header__login-signup-link {
+    margin: 0;
+    padding: 0;
+    color: white;
+    font-size: 18px;
+    line-height: 22px;
+    font-weight: 400;
+    text-align: right;
+    background-color: transparent;
+    border: none;
+    transition: opacity .2s ease-in-out;
+    text-decoration: none;
+}
+
+.header__login-signup-link:hover {
+    opacity: 60%;
+}
+
+
+@media screen and (max-width: 920px) {
+  
+    .header__login-signup-link {
+        font-size: 14px;
+        line-height: 16.94px;
+    }
+
+}
+  
