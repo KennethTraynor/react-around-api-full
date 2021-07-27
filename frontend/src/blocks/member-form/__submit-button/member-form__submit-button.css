@@ -16,7 +16,7 @@
 }
 
 .member-form__submit-button:hover {
-    opacity: 85%;
+    opacity: .85;
 }
 
 @media screen and (max-width: 424px) {
