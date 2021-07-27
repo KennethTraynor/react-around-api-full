@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {
   const { authorizaton } = req.headers;
 
   if (!authorizaton || !authorizaton.startsWith('Bearer ')) {
-    return new UnauthorizedError('Authorization required');
+    next(new UnauthorizedError('Authorization required'));
   }
 
   const token = authorizaton.replace('Bearer ', '');
@@ -15,7 +15,7 @@ module.exports = (req, res, next) => {
   try {
     payload = jwt.verify(token, 'secret-key');
   } catch (err) {
-    return new UnauthorizedError('Authorization required');
+    next(new UnauthorizedError('Authorization required'));
   }
 
   req.user = payload;
