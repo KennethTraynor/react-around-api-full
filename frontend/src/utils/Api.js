@@ -11,16 +11,6 @@ class Api {
       .then(res => {
         return this._handleResponse(res)
       })
-
-  }
-
-  getUserInfo() {
-    return fetch(`${this._baseUrl}/users/me`, {
-      headers: this._headers
-    })
-      .then(res => {
-        return this._handleResponse(res)
-      })
   }
 
   addCard({ name, link }) {
@@ -56,7 +46,6 @@ class Api {
       .then(res => {
         return this._handleResponse(res)
       })
-
   }
 
   setUserInfo({ name, about }) {
@@ -96,11 +85,11 @@ class Api {
 }
 
 const api = new Api({
-  baseUrl: "https://around.nomoreparties.co/v1/group-10",
+  baseUrl: "https://kennytraynor.students.nomoreparties.site/api",
   headers:
   {
-    authorization: "60ad2ada-16d8-4dd8-b337-f86301ff39f8",
-    "Content-Type": "application/json"
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('token')}`,
   }
 });
 
