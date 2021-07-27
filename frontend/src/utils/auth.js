@@ -1,4 +1,4 @@
-const baseUrl = 'https://kennytraynor.students.nomoreparties.site/api';
+const baseUrl = 'api.kennytraynor.students.nomoreparties.site';
 
 export const register = (password, email) => {
     return fetch(`${baseUrl}/signup`, {
