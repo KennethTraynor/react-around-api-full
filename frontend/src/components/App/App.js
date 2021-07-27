@@ -51,8 +51,8 @@ function App() {
       auth.getContent(token).then((res) => {
         if (res) {
           setLoggedIn(true);
-          setEmail(res.data.email);
-          requestUserInfo();
+          setEmail(res.email);
+          setCurrentUser(currentUser => ({ ...currentUser, userName: res.name, userDescription: res.about, userAvatar: res.avatar, userId: res._id }))
           getCards();
           history.push('/');
         }
@@ -102,14 +102,6 @@ function App() {
     setCurrentUser({ userName: '', userDescription: '', userAvatar: '', userId: '' });
     localStorage.removeItem('token');
     history.push('/signin');
-  }
-
-  const requestUserInfo = () => {
-    api.getUserInfo()
-      .then((res) => {
-        setCurrentUser(currentUser => ({ ...currentUser, userName: res.name, userDescription: res.about, userAvatar: res.avatar, userId: res._id }))
-      })
-      .catch((err) => console.log(err))
   }
 
   const showInfoTooltip = (message, status) => {
