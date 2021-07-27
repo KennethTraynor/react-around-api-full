@@ -1,10 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const { celebrate, Joi, errors } = require('celebrate');
+
+const auth = require('./middlewares/auth');
+
 const userRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
+
 const createUser = require('./controllers/createUser');
 const login = require('./controllers/login');
-const auth = require('./middlewares/auth');
 
 const { PORT = 3000 } = process.env;
 
@@ -21,11 +25,27 @@ mongoose.connect('mongodb://localhost:27017/aroundb', {
 app.use('/users', auth, userRouter);
 app.use('/cards', auth, cardsRouter);
 
-app.post('/signup', createUser);
-app.post('/signin', login);
+app.post('/signup', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required(),
+  }),
+}), createUser);
 
-app.use((req, res) => {
-  res.status(404).send({ message: 'Requested resource not found' });
+app.post('/signin', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required(),
+  }),
+}), login);
+
+app.use(errors());
+
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message } = err;
+  res
+    .status(statusCode)
+    .send({ message: statusCode === 500 ? 'Internal Server Error' : message });
 });
 
 app.listen(PORT);

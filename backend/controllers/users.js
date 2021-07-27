@@ -1,78 +1,78 @@
+const BadRequestError = require('../errors/bad-request-error');
+const NotFoundError = require('../errors/not-found-error');
 const User = require('../models/user');
 
-module.exports.getUsers = (req, res) => {
+module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((data) => res.status(200).send(data))
-    .catch(() => res.status(500).send({ message: 'Internal Server Error' }));
+    .catch(next);
 };
 
-module.exports.getUser = (req, res) => {
+module.exports.getUser = (req, res, next) => {
   User.findById(req.params.userId)
     .then((data) => {
       if (!data) {
-        res.status(404).send({ message: 'User Not Found' });
+        throw new NotFoundError('User Not Found');
       } else {
         res.status(200).send(data);
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Invalid ID' });
-      } else {
-        res.status(500).send({ message: 'Internal Server Error' });
+        next(new BadRequestError('Invalid ID'));
       }
+      next(err);
     });
 };
 
-module.exports.updateProfile = (req, res) => {
+module.exports.updateProfile = (req, res, next) => {
   const { name, about } = req.body;
 
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
     .then((data) => {
       if (!data) {
-        res.status(404).send({ message: 'User Not Found' });
+        throw new NotFoundError('User Not Found');
       } else {
         res.status(200).send(data);
       }
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Invalid Syntax' });
+        next(new BadRequestError('Invalid Syntax'));
       } else if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Invalid ID' });
+        next(new BadRequestError('Invalid ID'));
       } else {
-        res.status(500).send({ message: 'Internal Server Error' });
+        next(err);
       }
     });
 };
 
-module.exports.updateAvatar = (req, res) => {
+module.exports.updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
 
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
     .then((data) => {
       if (!data) {
-        res.status(404).send({ message: 'User Not Found' });
+        throw new NotFoundError('User Not Found');
       } else {
         res.status(200).send(data);
       }
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Invalid Syntax' });
+        next(new BadRequestError('Invalid Syntax'));
       } else if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Invalid ID' });
-      } else {
-        res.status(500).send({ message: 'Internal Server Error' });
+        next(new BadRequestError('Invalid ID'));
       }
+      next(err);
     });
 };
 
-module.exports.getCurrentUser = (req, res) => {
+module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((data) => {
       if (!data) {
-        res.status(404).send({ message: 'User Not Found' });
+        throw new NotFoundError('User Not Found');
       } else {
         res
           .status(200)
@@ -86,9 +86,8 @@ module.exports.getCurrentUser = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Invalid ID' });
-      } else {
-        res.status(500).send({ message: 'Internal Server Error' });
+        next(new BadRequestError('Invalid ID'));
       }
+      next(err);
     });
 };
