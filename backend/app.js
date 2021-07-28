@@ -7,8 +7,8 @@ const auth = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 // Routes and Controllers
-const createUser = require('./controllers/createUser');
-const login = require('./controllers/login');
+const { createUser } = require('./controllers/createUser');
+const { login } = require('./controllers/login');
 const userRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
 
@@ -33,6 +33,7 @@ app.post('/signup', celebrate({
     password: Joi.string().required(),
   }),
 }), createUser);
+
 app.post('/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
