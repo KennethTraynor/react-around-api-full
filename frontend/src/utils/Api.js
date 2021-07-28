@@ -1,12 +1,14 @@
 class Api {
-  constructor({ baseUrl, headers }) {
+  constructor({ baseUrl }) {
     this._baseUrl = baseUrl;
-    this._headers = headers;
   }
 
   getInitialCards() {
     return fetch(`${this._baseUrl}/cards`, {
-      headers: this._headers
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      }
     })
       .then(res => {
         return this._handleResponse(res)
@@ -15,7 +17,10 @@ class Api {
 
   addCard({ name, link }) {
     return fetch(`${this._baseUrl}/cards`, {
-      headers: this._headers,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      },
       method: 'POST',
       body: JSON.stringify({
         name,
@@ -29,7 +34,10 @@ class Api {
 
   deleteCard({ cardID }) {
     return fetch(`${this._baseUrl}/cards/${cardID}`, {
-      headers: this._headers,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      },
       method: 'DELETE'
     })
       .then(res => {
@@ -40,7 +48,10 @@ class Api {
   updateCardLike({ cardID, like }) {
 
     return fetch(`${this._baseUrl}/cards/likes/${cardID}`, {
-      headers: this._headers,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      },
       method: like ? 'PUT' : 'DELETE'
     })
       .then(res => {
@@ -50,7 +61,10 @@ class Api {
 
   setUserInfo({ name, about }) {
     return fetch(`${this._baseUrl}/users/me`, {
-      headers: this._headers,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      },
       method: 'PATCH',
       body: JSON.stringify({
         name,
@@ -64,7 +78,10 @@ class Api {
 
   setUserAvatar({ avatar }) {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
-      headers: this._headers,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      },
       method: 'PATCH',
       body: JSON.stringify({
         avatar
@@ -86,11 +103,6 @@ class Api {
 
 const api = new Api({
   baseUrl: "https://api.kennytraynor.students.nomoreparties.site",
-  headers:
-  {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${localStorage.getItem('token')}`,
-  }
 });
 
 export default api;
