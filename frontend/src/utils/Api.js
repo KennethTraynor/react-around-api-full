@@ -47,7 +47,7 @@ class Api {
 
   updateCardLike({ cardID, like }) {
 
-    return fetch(`${this._baseUrl}/cards/likes/${cardID}`, {
+    return fetch(`${this._baseUrl}/cards/${cardID}/likes`, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
