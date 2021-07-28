@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 // middlewares
 const { celebrate, Joi, errors } = require('celebrate');
@@ -21,6 +22,9 @@ mongoose.connect('mongodb://localhost:27017/aroundb', {
   useCreateIndex: true,
   useFindAndModify: false,
 });
+
+app.use(cors());
+app.options('*', cors());
 
 app.use(requestLogger);
 
