@@ -1,6 +1,6 @@
+const User = require('../models/user');
 const BadRequestError = require('../errors/bad-request-error');
 const NotFoundError = require('../errors/not-found-error');
-const User = require('../models/user');
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})

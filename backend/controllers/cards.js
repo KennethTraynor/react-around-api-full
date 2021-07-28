@@ -1,6 +1,6 @@
+const Card = require('../models/card');
 const BadRequestError = require('../errors/bad-request-error');
 const NotFoundError = require('../errors/not-found-error');
-const Card = require('../models/card');
 
 module.exports.getCards = (req, res, next) => {
   Card.find({})
@@ -13,7 +13,7 @@ module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
 
   Card.create({ name, link, owner: req.user._id })
-    .populate('owner')
+    .then((card) => Card.findById(card._id).populate('owner'))
     .then((card) => res.status(200).send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') {
