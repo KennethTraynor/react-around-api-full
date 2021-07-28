@@ -3,7 +3,7 @@ const { celebrate, Joi } = require('celebrate');
 const validator = require('validator');
 
 function validateUrl(string) {
-  return validator.isURL(string);
+  return validator.isURL(string) ? string : false;
 }
 
 const {
