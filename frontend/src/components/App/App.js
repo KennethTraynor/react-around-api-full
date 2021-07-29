@@ -63,7 +63,7 @@ function App() {
 
   const getCards = () => {
     api.getInitialCards()
-      .then((res) => setCards(res.map(item => (createCardElement(item)))))
+      .then((cards) => setCards(cards.map(item => (createCardElement(item)))))
       .catch((err) => console.log(err))
   }
 
