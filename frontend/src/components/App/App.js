@@ -43,7 +43,7 @@ function App() {
 
   useEffect(() => {
     tokenCheck();
-  }, [loggedIn]);
+  }, []);
 
   const tokenCheck = () => {
     const token = localStorage.getItem('token');
@@ -86,8 +86,7 @@ function App() {
       if (!res) {
         showInfoTooltip('Oops, something went wrong! Please try again.', 'failure');
       } else if (res.token) {
-        setLoggedIn(true);
-        history.push('/');
+        tokenCheck();
       }
     })
       .catch((err) => {
