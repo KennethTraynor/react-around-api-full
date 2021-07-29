@@ -10,6 +10,7 @@
     border: none;
     transition: opacity .2s ease-in-out;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .header__login-signup-link:hover {
