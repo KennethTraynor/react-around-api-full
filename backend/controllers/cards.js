@@ -29,8 +29,8 @@ module.exports.deleteCard = (req, res, next) => {
   Card.findById(req.params.cardId)
     .populate('owner')
     .then((c) => {
-      if (c.owner._id !== req.user._id || !req.user._id) {
-        throw new UnauthorizedError(`Unauthorized ${c.owner._id} ${req.user._id}`);
+      if (c.owner._id !== req.user._id) {
+        throw new UnauthorizedError(`Insufficient Permissions ${c.owner._id} ${req.user._id}`);
       } else {
         Card.findByIdAndDelete(req.params.cardId)
           .populate(['owner', 'likes'])
