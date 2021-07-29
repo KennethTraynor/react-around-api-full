@@ -30,7 +30,7 @@ module.exports.deleteCard = (req, res, next) => {
     .populate('owner')
     .then((c) => {
       if (c.owner._id !== req.user._id || !req.user._id) {
-        throw new UnauthorizedError('Unauthorized');
+        throw new UnauthorizedError(`Unauthorized ${c.owner._id} ${req.user._id}`);
       } else {
         Card.findByIdAndDelete(req.params.cardId)
           .populate(['owner', 'likes'])
