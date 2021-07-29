@@ -12,7 +12,7 @@
 
 * Responsive CSS layouts to allow for smaller screens to have a better experience
 
-* Registering, Logging In (Authorization)
+* Registering, Logging In, Tokens (Authorization)
 
 ## Technologies & Techniques
 
