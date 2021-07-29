@@ -27,8 +27,9 @@ module.exports.createCard = (req, res, next) => {
 
 module.exports.deleteCard = (req, res, next) => {
   Card.findById(req.params.cardId)
+    .populate('owner')
     .then((c) => {
-      if (c.owner !== req.user._id || !req.user._id) {
+      if (c.owner._id !== req.user._id || !req.user._id) {
         throw new UnauthorizedError('Unauthorized');
       } else {
         Card.findByIdAndDelete(req.params.cardId)
