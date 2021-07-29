@@ -7,8 +7,7 @@ module.exports.getCards = (req, res, next) => {
   Card.find({})
     .sort({ createdAt: -1 })
     .populate(['owner', 'likes'])
-    .then((cards) => cards.filter((card) => !card.owner))
-    .then((newCards) => res.status(200).send(newCards))
+    .then((cards) => res.status(200).send(cards))
     .catch(next);
 };
 
