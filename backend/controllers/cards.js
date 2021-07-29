@@ -1,6 +1,7 @@
 const Card = require('../models/card');
 const BadRequestError = require('../errors/bad-request-error');
 const NotFoundError = require('../errors/not-found-error');
+const UnauthorizedError = require('../errors/unauthorized-error');
 
 module.exports.getCards = (req, res, next) => {
   Card.find({})
@@ -25,13 +26,20 @@ module.exports.createCard = (req, res, next) => {
 };
 
 module.exports.deleteCard = (req, res, next) => {
-  Card.findByIdAndDelete(req.params.cardId)
-    .populate(['owner', 'likes'])
-    .then((card) => {
-      if (!card) {
-        throw new NotFoundError('Card Not Found');
+  Card.findById(req.params.cardId)
+    .then((c) => {
+      if (c.owner !== req.user._id || !req.user._id) {
+        throw new UnauthorizedError('Unauthorized');
       } else {
-        res.status(200).send(card);
+        Card.findByIdAndDelete(req.params.cardId)
+          .populate(['owner', 'likes'])
+          .then((card) => {
+            if (!card) {
+              throw new NotFoundError('Card Not Found');
+            } else {
+              res.status(200).send(card);
+            }
+          });
       }
     })
     .catch((err) => {
