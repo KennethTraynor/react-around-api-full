@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 
 // middlewares
 const { celebrate, Joi, errors } = require('celebrate');
@@ -13,6 +15,8 @@ const { createUser } = require('./controllers/createUser');
 const { login } = require('./controllers/login');
 const userRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
+const { errorHandler } = require('./controllers/errorHandler');
+const NotFoundError = require('./errors/not-found-error');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -24,8 +28,17 @@ mongoose.connect('mongodb://localhost:27017/aroundb', {
   useFindAndModify: false,
 });
 
+const limiter = rateLimit({
+  windowMs: 60000,
+  max: 50,
+});
+
 app.use(cors());
 app.options('*', cors());
+
+app.use(limiter);
+
+app.use(helmet());
 
 app.use(requestLogger);
 
@@ -52,15 +65,12 @@ app.post('/signin', celebrate({
   }),
 }), login);
 
+app.get('*', (req, res, next) => next(new NotFoundError('Requested resource not found')));
+
 app.use(errorLogger);
 
 app.use(errors());
 
-app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
-  res
-    .status(statusCode)
-    .send({ message: statusCode === 500 ? 'Internal Server Error' : message });
-});
+app.use(errorHandler);
 
 app.listen(PORT);

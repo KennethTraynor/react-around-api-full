@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const BadRequestError = require('../errors/bad-request-error');
+const ConflictError = require('../errors/conflict-error');
 
 module.exports.createUser = (req, res, next) => {
   bcrypt.hash(req.body.password, 10)
@@ -11,6 +12,11 @@ module.exports.createUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Invalid Syntax'));
+      }
+      if (err.name === 'MongoError') {
+        if (err.code === 11000) {
+          next(new ConflictError('Conflicting email'));
+        }
       }
       next(err);
     });
