@@ -63,7 +63,7 @@ app.post('/signin', celebrate({
   }),
 }), login);
 
-app.get('*', (next) => next(new NotFoundError('Requested resource not found')));
+app.get('*', (req, res, next) => next(new NotFoundError('Requested resource not found')));
 
 app.use(errorLogger);
 
