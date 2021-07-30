@@ -28,7 +28,7 @@ mongoose.connect('mongodb://localhost:27017/aroundb', {
 
 const limiter = rateLimit({
   windowMs: 60000,
-  max: 50,
+  max: 100,
 });
 
 app.use(cors());
