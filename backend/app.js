@@ -28,17 +28,17 @@ mongoose.connect('mongodb://localhost:27017/aroundb', {
   useFindAndModify: false,
 });
 
-// const limiter = rateLimit({
-//   windowMs: 60000,
-//   max: 50,
-// });
+const limiter = rateLimit({
+  windowMs: 60000,
+  max: 50,
+});
 
 app.use(cors());
 app.options('*', cors());
 
-// app.use(limiter);
+app.use(limiter);
 
-// app.use(helmet());
+app.use(helmet());
 
 app.use(requestLogger);
 
